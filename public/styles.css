@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Tajawal:wght@300;500;800&display=swap');
+
+* {
+	font-family: 'Tajawal', sans-serif;
+}
+
+h1 {
+	position: relative;
+	width: max-content;
+}
+
+h1::before,
+h1::after {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	content: '';
+}
+
+h1::before {
+	background-color: white;
+	animation: typewriter steps(25) 4s forwards;
+}
+
+h1::after {
+	width: 0.2rem;
+	background-color: black;
+	animation: typewriter steps(25) 4s forwards, blink 1s infinite;
+	opacity: 1;
+}
+
+@keyframes typewriter {
+	to {
+		left: 100%;
+	}
+}
+
+@keyframes blink {
+	to {
+		opacity: 0;
+	}
+}
+
+ul,
+ol {
+	padding: 0;
+	list-style: none;
+}
