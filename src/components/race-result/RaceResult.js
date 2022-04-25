@@ -1,6 +1,7 @@
 import classes from './RaceResult.module.css';
 
 const RaceResult = ({ raceData }) => {
+	console.log(raceData);
 	return (
 		<div className={classes.wrapper}>
 			<h2>Race Detail 🏁</h2>
@@ -10,7 +11,7 @@ const RaceResult = ({ raceData }) => {
 						<li key={driver.Driver.code} className={classes.detail}>
 							<span>{driver.position}.</span>
 							<span>{driver.Driver.code}</span>
-							<span>{driver.Time ? driver.Time.time : 'DNF'}</span>
+							<span>{driver.Time ? driver.Time.time : driver.status}</span>
 							<span>{driver.Constructor.name}</span>
 						</li>
 					);
