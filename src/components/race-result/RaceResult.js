@@ -1,7 +1,6 @@
 import classes from './RaceResult.module.css';
 
 const RaceResult = ({ raceData }) => {
-	console.log(raceData);
 	return (
 		<div className={classes.wrapper}>
 			<h2>Race Detail 🏁</h2>

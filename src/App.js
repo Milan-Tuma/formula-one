@@ -1,43 +1,50 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+
+import {
+	getDataHandler,
+	getRaceData,
+	getDriverStandings,
+	getConstructorStandings,
+} from './utils/race-helper';
 
 import RaceCalendar from './components/race-calendar/RaceCalendar';
 import RaceResult from './components/race-result/RaceResult';
 import SeasonStandings from './components/season-standings/SeasonStandings';
 import Loader from './components/ui/Loader';
-
-/*
-	API
-		All results - `https://ergast.com/api/f1/${season}/results.json`
-		Single race - `https://ergast.com/api/f1/${season}/${race}/results.json` 
-*/
+import ConstructorStandings from './components/constructor-standings/ConstructorStandings';
+import RaceCountdown from './components/race-countdown/RaceCountdown';
 
 const App = () => {
-	const today = new Date();
+	let today = new Date();
 
 	const [data, setData] = useState();
 	const [season, setSeason] = useState(today.getFullYear());
 	const [race, setRace] = useState();
 	const [raceData, setRaceData] = useState();
 	const [standings, setStandings] = useState();
+	const [constructors, setConstructors] = useState();
 	const [loading, setLoading] = useState(false);
+	const [nextRace, setNextRace] = useState();
+	const [timeDiff, setTimeDiff] = useState();
+	const [currentTime, setCurrentTime] = useState(new Date());
 
 	const finishedRaces = useCallback(() => {
 		try {
-			if (data) {
-				const finishedRaces = data.Races.filter((race) => {
-					return new Date(race.date) < new Date();
-				});
-				setRace(finishedRaces.length);
-			}
+			if (!data) return;
+			const finishedRaces = data.Races.filter((race) => {
+				return new Date(race.date) < new Date();
+			});
+			const raceNumber = finishedRaces.length;
+			setRace(raceNumber);
+			setNextRace(data.Races[raceNumber]);
 		} catch (error) {
-			console.log(error.message);
+			throw new Error(error.message);
 		}
 	}, [data]);
 
 	useEffect(() => {
 		(async () => {
-			const seasonData = await getDataHandler(season);
+			const seasonData = await getDataHandler(season, setLoading);
 			setData(seasonData.MRData.RaceTable);
 		})();
 	}, [season]);
@@ -45,29 +52,31 @@ const App = () => {
 	useEffect(() => {
 		(async () => {
 			if (!race) {
-				finishedRaces();
-				return;
+				return finishedRaces();
 			}
-			const raceData = await getDataHandler(`${season}/${race}/results`);
-			setRaceData(raceData.MRData.RaceTable.Races[0].Results);
 
-			const standingsData = await getDataHandler(
-				`${season}/${race}/driverStandings`
+			const raceData = await getRaceData(season, race, setLoading);
+			setRaceData(raceData);
+
+			const standingsData = await getDriverStandings(season, race, setLoading);
+			setStandings(standingsData);
+
+			const constructorsData = await getConstructorStandings(
+				season,
+				race,
+				setLoading
 			);
-			setStandings(
-				standingsData.MRData.StandingsTable.StandingsLists[0].DriverStandings
-			);
+			setConstructors(constructorsData);
 		})();
 	}, [race, season, data, finishedRaces]);
 
-	const getDataHandler = async (apiUrl) => {
-		setLoading(true);
-		const response = await axios.get(
-			`https://ergast.com/api/f1/${apiUrl}.json`
-		);
-		setLoading(false);
-		return response.data;
-	};
+	useEffect(() => {
+		if (nextRace) {
+			const nextRaceTime = new Date(`${nextRace.date}, ${nextRace.time}`);
+			setTimeDiff(nextRaceTime - currentTime);
+		}
+		setTimeout(() => setCurrentTime(new Date()), 10000);
+	}, [nextRace, currentTime]);
 
 	return (
 		<div>
@@ -81,6 +90,7 @@ const App = () => {
 					value={season}
 					type="number"
 				/>
+				{data && race && <RaceCountdown diff={timeDiff} />}
 			</div>
 			<div style={{ display: 'flex' }}>
 				{data && (
@@ -88,6 +98,9 @@ const App = () => {
 				)}
 				{raceData && <RaceResult raceData={raceData} />}
 				{standings && <SeasonStandings standingsData={standings} />}
+				{constructors && (
+					<ConstructorStandings constructorsData={constructors} />
+				)}
 			</div>
 		</div>
 	);
