@@ -4,6 +4,10 @@
 	font-family: 'Tajawal', sans-serif;
 }
 
+body {
+	margin: 0;
+}
+
 h1 {
 	position: relative;
 	width: max-content;
@@ -47,4 +51,10 @@ ul,
 ol {
 	padding: 0;
 	list-style: none;
+}
+
+@media (max-width: 30em) {
+	h1 {
+		font-size: 1.5rem;
+	}
 }

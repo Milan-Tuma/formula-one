@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 import {
 	getDataHandler,
@@ -12,7 +12,11 @@ import RaceResult from './components/race-result/RaceResult';
 import SeasonStandings from './components/season-standings/SeasonStandings';
 import Loader from './components/ui/Loader';
 import ConstructorStandings from './components/constructor-standings/ConstructorStandings';
-import RaceCountdown from './components/race-countdown/RaceCountdown';
+import RecentRaces from './components/recent-races/RecentRaces';
+import ResultStanding from './components/result-standing/ResultStanding';
+import RaceSelector from './components/race-selector/RaceSelector';
+
+import './index.css';
 
 const App = () => {
 	let today = new Date();
@@ -24,9 +28,23 @@ const App = () => {
 	const [standings, setStandings] = useState();
 	const [constructors, setConstructors] = useState();
 	const [loading, setLoading] = useState(false);
-	const [nextRace, setNextRace] = useState();
-	const [timeDiff, setTimeDiff] = useState();
-	const [currentTime, setCurrentTime] = useState(new Date());
+
+	const lastRace = useMemo(() => {
+		if (!data) return;
+		const finishedRaces = data.Races.filter(
+			(race) => new Date(race.date) < new Date()
+		);
+		const recentRace = finishedRaces.reverse();
+		return recentRace[0];
+	}, [data]);
+
+	const nextRace = useMemo(() => {
+		if (!data) return;
+		const unfinishedRaces = data.Races.filter(
+			(race) => new Date(race.date) > new Date()
+		);
+		return unfinishedRaces[0];
+	}, [data]);
 
 	const finishedRaces = useCallback(() => {
 		try {
@@ -36,7 +54,6 @@ const App = () => {
 			});
 			const raceNumber = finishedRaces.length;
 			setRace(raceNumber);
-			setNextRace(data.Races[raceNumber]);
 		} catch (error) {
 			throw new Error(error.message);
 		}
@@ -70,17 +87,9 @@ const App = () => {
 		})();
 	}, [race, season, data, finishedRaces]);
 
-	useEffect(() => {
-		if (nextRace) {
-			const nextRaceTime = new Date(`${nextRace.date}, ${nextRace.time}`);
-			setTimeDiff(nextRaceTime - currentTime);
-		}
-		setTimeout(() => setCurrentTime(new Date()), 10000);
-	}, [nextRace, currentTime]);
-
 	return (
 		<div>
-			<h1>Formula One App Listening</h1>
+			<h1 className="text-xl">Formula One App Listening</h1>
 			<div style={{ position: 'fixed', top: '10px', right: '20px' }}>
 				{loading && <Loader />}
 			</div>
@@ -90,7 +99,6 @@ const App = () => {
 					value={season}
 					type="number"
 				/>
-				{data && race && <RaceCountdown diff={timeDiff} />}
 			</div>
 			<div style={{ display: 'flex' }}>
 				{data && (
@@ -102,6 +110,19 @@ const App = () => {
 					<ConstructorStandings constructorsData={constructors} />
 				)}
 			</div>
+			{data && season === today.getFullYear() && (
+				<RecentRaces lastRace={lastRace} nextRace={nextRace} />
+			)}
+			{data && (
+				<RaceSelector setRace={setRace} currRace={race} racesData={data} />
+			)}
+			{data && (
+				<ResultStanding
+					raceData={raceData}
+					driversData={standings}
+					constructorsData={constructors}
+				/>
+			)}
 		</div>
 	);
 };

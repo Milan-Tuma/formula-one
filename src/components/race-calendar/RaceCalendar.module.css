@@ -4,3 +4,9 @@
 	margin: 0;
 	padding: 0;
 }
+
+@media (max-width: 30em) {
+	.calendar {
+		display: none;
+	}
+}

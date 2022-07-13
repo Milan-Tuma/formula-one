@@ -16,3 +16,9 @@
 	grid-template-columns: 30px 1fr 40px;
 	text-align: left;
 }
+
+@media (max-width: 30em) {
+	.wrapper {
+		display: none;
+	}
+}
