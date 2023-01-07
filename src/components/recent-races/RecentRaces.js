@@ -21,19 +21,19 @@ const RecentRaces = ({ lastRace, nextRace }) => {
 						Last
 					</p>
 					<h3 className="text-blue-600 font-bold uppercase">
-						{lastRace.raceName}
+						{lastRace?.raceName}
 					</h3>
 					<a
-						href={lastRace.Circuit.url}
+						href={lastRace?.Circuit.url}
 						target="_blank"
 						rel="noreferrer"
 						className="text-gray-600 text-sm"
 					>
-						{lastRace.Circuit.circuitName}{' '}
+						{lastRace?.Circuit.circuitName}{' '}
 						<i className="fa-solid fa-arrow-up-right-from-square" />
 					</a>
 					<div className="text-gray-600 text-sm">
-						{localizeDate(lastRace.date)}
+						{localizeDate(lastRace?.date)}
 					</div>
 				</div>
 			</div>
@@ -46,19 +46,19 @@ const RecentRaces = ({ lastRace, nextRace }) => {
 						Next
 					</p>
 					<h3 className="text-green-600 font-bold uppercase">
-						{nextRace.raceName}
+						{nextRace?.raceName}
 					</h3>
 					<a
-						href={nextRace.Circuit.url}
+						href={nextRace?.Circuit.url}
 						target="_blank"
 						rel="noreferrer"
 						className="text-gray-600 text-sm"
 					>
-						{nextRace.Circuit.circuitName}{' '}
+						{nextRace?.Circuit.circuitName}{' '}
 						<i className="fa-solid fa-arrow-up-right-from-square" />
 					</a>
 					<div className="text-gray-600 text-sm">
-						{localizeDate(nextRace.date)}
+						{localizeDate(nextRace?.date)}
 					</div>
 				</div>
 			</div>
