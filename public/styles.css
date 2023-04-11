@@ -8,7 +8,7 @@ body {
 	margin: 0;
 }
 
-h1 {
+/* h1 {
 	position: relative;
 	width: max-content;
 }
@@ -33,7 +33,7 @@ h1::after {
 	background-color: black;
 	animation: typewriter steps(25) 4s forwards, blink 1s infinite;
 	opacity: 1;
-}
+} */
 
 @keyframes typewriter {
 	to {

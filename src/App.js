@@ -12,11 +12,12 @@ import RaceResult from './components/race-result/RaceResult';
 import SeasonStandings from './components/season-standings/SeasonStandings';
 import Loader from './components/ui/Loader';
 import ConstructorStandings from './components/constructor-standings/ConstructorStandings';
-import RecentRaces from './components/recent-races/RecentRaces';
+import RecentRaces from './components/RecentRaces';
 import ResultStanding from './components/result-standing/ResultStanding';
 import RaceSelector from './components/race-selector/RaceSelector';
 
 import './index.css';
+import Hero from './components/Hero';
 
 const App = () => {
 	let today = new Date();
@@ -89,7 +90,7 @@ const App = () => {
 
 	return (
 		<div>
-			<h1 className="text-xl">Formula One App Listening</h1>
+			<Hero headline="Pocket formula one app" year={season} />
 			<div style={{ position: 'fixed', top: '10px', right: '20px' }}>
 				{loading && <Loader />}
 			</div>
@@ -110,9 +111,7 @@ const App = () => {
 					<ConstructorStandings constructorsData={constructors} />
 				)}
 			</div>
-			{data && season === today.getFullYear() && (
-				<RecentRaces lastRace={lastRace} nextRace={nextRace} />
-			)}
+			{data && <RecentRaces lastRace={lastRace} nextRace={nextRace} />}
 			{data && (
 				<RaceSelector setRace={setRace} currRace={race} racesData={data} />
 			)}
