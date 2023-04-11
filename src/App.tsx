@@ -20,18 +20,18 @@ import Hero from './components/Hero';
 const App = () => {
 	let today = new Date();
 
-	const [data, setData] = useState();
-	const [season, setSeason] = useState(today.getFullYear());
-	const [race, setRace] = useState();
-	const [raceData, setRaceData] = useState();
-	const [standings, setStandings] = useState();
-	const [constructors, setConstructors] = useState();
-	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState<any>();
+	const [season, setSeason] = useState<number>(today.getFullYear());
+	const [race, setRace] = useState<any>();
+	const [raceData, setRaceData] = useState<any>();
+	const [standings, setStandings] = useState<any>();
+	const [constructors, setConstructors] = useState<any>();
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const lastRace = useMemo(() => {
 		if (!data) return;
 		const finishedRaces = data.Races.filter(
-			(race) => new Date(race.date) < new Date()
+			(race: any) => new Date(race.date) < new Date()
 		);
 		const recentRace = finishedRaces.reverse();
 		return recentRace[0];
@@ -40,7 +40,7 @@ const App = () => {
 	const nextRace = useMemo(() => {
 		if (!data) return;
 		const unfinishedRaces = data.Races.filter(
-			(race) => new Date(race.date) > new Date()
+			(race: any) => new Date(race.date) > new Date()
 		);
 		return unfinishedRaces[0];
 	}, [data]);
@@ -48,19 +48,19 @@ const App = () => {
 	const finishedRaces = useCallback(() => {
 		try {
 			if (!data) return;
-			const finishedRaces = data.Races.filter((race) => {
+			const finishedRaces = data.Races.filter((race: any) => {
 				return new Date(race.date) < new Date();
 			});
 			const raceNumber = finishedRaces.length;
 			setRace(raceNumber);
-		} catch (error) {
+		} catch (error: any) {
 			throw new Error(error.message);
 		}
 	}, [data]);
 
 	useEffect(() => {
 		(async () => {
-			const seasonData = await getDataHandler(season, setLoading);
+			const seasonData = await getDataHandler(`${season}`);
 			setData(seasonData.MRData.RaceTable);
 		})();
 	}, [season]);
