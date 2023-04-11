@@ -1,6 +1,21 @@
+import { FC } from 'react';
 import { localizeDate } from '../../helpers/localizeDate';
 
-const RaceCard = ({ raceDetail, title, color, icon }) => {
+type RaceCardProps = {
+	raceDetail: {
+		raceName: string;
+		Circuit: {
+			url: string;
+			circuitName: string;
+		};
+		date: string;
+	};
+	title: string;
+	color: string;
+	icon: string;
+};
+
+const RaceCard: FC<RaceCardProps> = ({ raceDetail, title, color, icon }) => {
 	const { raceName, Circuit, date } = raceDetail;
 
 	return (

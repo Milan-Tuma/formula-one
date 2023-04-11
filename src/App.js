@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-
 import {
 	getDataHandler,
 	getRaceData,
 	getDriverStandings,
 	getConstructorStandings,
 } from './utils/race-helper';
-
-import RaceCalendar from './components/race-calendar/RaceCalendar';
+// import RaceCalendar from './components/race-calendar/RaceCalendar';
 import RaceResult from './components/race-result/RaceResult';
 import SeasonStandings from './components/season-standings/SeasonStandings';
 import Loader from './components/ui/Loader';
@@ -90,21 +88,14 @@ const App = () => {
 
 	return (
 		<div>
-			<Hero headline="Pocket formula one app" year={season} />
+			<Hero headline="F1" year={season} />
 			<div style={{ position: 'fixed', top: '10px', right: '20px' }}>
 				{loading && <Loader />}
 			</div>
-			<div>
-				<input
-					onChange={(e) => setSeason(e.target.value)}
-					value={season}
-					type="number"
-				/>
-			</div>
 			<div style={{ display: 'flex' }}>
-				{data && (
+				{/* {data && (
 					<RaceCalendar year={season} racesData={data} setRaceData={setRace} />
-				)}
+				)} */}
 				{raceData && <RaceResult raceData={raceData} />}
 				{standings && <SeasonStandings standingsData={standings} />}
 				{constructors && (
