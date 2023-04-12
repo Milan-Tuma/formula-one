@@ -59,7 +59,13 @@ const ResultStanding = ({ raceData, driversData, constructorsData }) => {
 
 	const buttons = ['Race Results', 'Drivers', 'Constructors'];
 	const buttonContent = buttons.map((button, i) => (
-		<Button key={i} onClick={() => setIndex(i)}>
+		<Button
+			key={i}
+			onClick={() => setIndex(i)}
+			className={`${
+				index === i ? 'bg-red-600' : 'bg-neutral-400'
+			} w-full shadow-md py-3 text-white`}
+		>
 			{button}
 		</Button>
 	));
