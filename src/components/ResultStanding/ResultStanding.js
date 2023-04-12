@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import DataList from '../data-list/DataList';
+import DataList from '../DataList/DataList';
 import Button from '../ui/Button';
 
 import '../../index.css';

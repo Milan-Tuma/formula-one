@@ -1,4 +1,4 @@
-import RaceDetail from '../race-detail/RaceDetail';
+import RaceDetail from '../RaceDetail/RaceDetail';
 
 import classes from './RaceCalendar.module.css';
 

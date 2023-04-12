@@ -6,13 +6,13 @@ import {
 	getConstructorStandings,
 } from './utils/race-helper';
 // import RaceCalendar from './components/race-calendar/RaceCalendar';
-import RaceResult from './components/race-result/RaceResult';
-import SeasonStandings from './components/season-standings/SeasonStandings';
+import RaceResult from './components/RaceResult/RaceResult';
+import SeasonStandings from './components/SeasonStanding/SeasonStandings';
 import Loader from './components/ui/Loader';
-import ConstructorStandings from './components/constructor-standings/ConstructorStandings';
+import ConstructorStandings from './components/ConstructorStanding/ConstructorStandings';
 import RecentRaces from './components/RecentRaces';
-import ResultStanding from './components/result-standing/ResultStanding';
-import RaceSelector from './components/race-selector/RaceSelector';
+import ResultStanding from './components/ResultStanding/ResultStanding';
+import RaceSelector from './components/RaceSelector/RaceSelector';
 
 import './index.css';
 import Hero from './components/Hero';

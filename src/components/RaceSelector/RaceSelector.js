@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import DataList from '../data-list/DataList';
-import RaceDetail from '../race-detail/RaceDetail';
+import DataList from '../DataList/DataList';
+import RaceDetail from '../RaceDetail/RaceDetail';
 import Modal from '../ui/Modal';
 
 import '../../index.css';
