@@ -18,16 +18,13 @@ const RaceSelector = ({ setRace, racesData, currRace }) => {
 	});
 
 	return (
-		<div className="md:hidden sm:block px-5 my-5">
+		<div className="md:hidden block px-5 mt-5 mb-2">
 			<p
-				className="flex flex-col items-center"
+				className="flex max-w-fit mx-auto text-gray-600"
 				onClick={() => setOpenModal(!openModal)}
 			>
-				<span className="font-bold border border-solid border-gray-800 px-2 py-1 rounded-md bg-gray-100 shadow">
-					Click here to select race
-				</span>
-				<span className="text-gray-600 mt-1">
-					Data for:{' '}
+				Data for:
+				<span className="ml-1 text-black underline">
 					{currRace && racesData.Races[currRace - 1].Circuit.circuitName}
 				</span>
 			</p>
