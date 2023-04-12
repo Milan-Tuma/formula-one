@@ -27,7 +27,7 @@ const RaceSelector = ({ setRace, racesData, currRace }) => {
 					Click here to select race
 				</span>
 				<span className="text-gray-600 mt-1">
-					Current race:{' '}
+					Data for:{' '}
 					{currRace && racesData.Races[currRace - 1].Circuit.circuitName}
 				</span>
 			</p>
