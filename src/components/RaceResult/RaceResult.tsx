@@ -1,6 +1,11 @@
+import { FC } from 'react';
 import classes from './RaceResult.module.css';
 
-const RaceResult = ({ raceData }) => {
+type RaceResultProps = {
+	raceData: any[];
+};
+
+const RaceResult: FC<RaceResultProps> = ({ raceData }) => {
 	return (
 		<div className={classes.wrapper}>
 			<h2>Race Detail 🏁</h2>

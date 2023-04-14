@@ -1,4 +1,4 @@
-interface DriverType {
+export interface DriverType {
 	driverId: string;
 	permanentNumber: string;
 	code: string;
@@ -9,14 +9,14 @@ interface DriverType {
 	nationality: string;
 }
 
-interface ConstructorType {
+export interface ConstructorType {
 	constructorId: string;
 	url: string;
 	name: string;
 	nationality: string;
 }
 
-interface StandingsType {
+export interface StandingsType {
 	position: string;
 	positionText: string;
 	points: string;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
 import DataList from '../DataList/DataList';
 import RaceDetail from '../RaceDetail/RaceDetail';
@@ -6,12 +6,22 @@ import Modal from '../ui/Modal';
 
 import '../../index.css';
 
-const RaceSelector = ({ setRace, racesData, currRace }) => {
+type RaceSelectorProps = {
+	setRace: React.Dispatch<any>;
+	racesData: any;
+	currRace: any;
+};
+
+const RaceSelector: FC<RaceSelectorProps> = ({
+	setRace,
+	racesData,
+	currRace,
+}) => {
 	const [openModal, setOpenModal] = useState(false);
 
 	const season = racesData.season;
 
-	const raceCalendar = racesData.Races.map((race, i) => {
+	const raceCalendar = racesData.Races.map((race: any, i: number) => {
 		return (
 			<RaceDetail key={i} setRaceData={setRace} raceData={race} index={i + 1} />
 		);

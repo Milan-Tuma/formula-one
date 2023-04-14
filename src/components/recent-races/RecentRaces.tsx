@@ -1,7 +1,13 @@
+import { FC } from 'react';
 import '../../index.css';
 
-const RecentRaces = ({ lastRace, nextRace }) => {
-	const localizeDate = (date) => {
+type RecentRacesProps = {
+	lastRace: any;
+	nextRace: any;
+};
+
+const RecentRaces: FC<RecentRacesProps> = ({ lastRace, nextRace }) => {
+	const localizeDate = (date: string) => {
 		const readableDate = new Date(date).toLocaleDateString('en-DE', {
 			day: 'numeric',
 			month: 'long',

@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
 import DataList from '../DataList/DataList';
 import Button from '../ui/Button';
 
 import '../../index.css';
 
-const ResultStanding = ({ raceData, driversData, constructorsData }) => {
+type ResultStandingProps = {
+	raceData: any[];
+	driversData: any[];
+	constructorsData: any[];
+};
+
+const ResultStanding: FC<ResultStandingProps> = ({
+	raceData,
+	driversData,
+	constructorsData,
+}) => {
 	const [index, setIndex] = useState(0);
 
 	if (!raceData || !driversData || !constructorsData)
@@ -58,34 +68,36 @@ const ResultStanding = ({ raceData, driversData, constructorsData }) => {
 	});
 
 	const buttons = ['Race Results', 'Drivers', 'Constructors'];
-	const buttonContent = buttons.map((button, i) => (
-		<Button
-			key={i}
-			onClick={() => setIndex(i)}
-			className={`${
-				index === i ? 'bg-red-600' : 'bg-neutral-400'
-			} w-full shadow-md py-3 text-white`}
-		>
-			{button}
-		</Button>
-	));
+	const buttonContent = buttons.map((button, i) => {
+		return (
+			<Button
+				key={i}
+				onClick={() => setIndex(i)}
+				className={`${
+					index === i ? 'bg-red-600' : 'bg-neutral-400'
+				} w-full shadow-md py-3 text-white`}
+			>
+				{<>{button}</>}
+			</Button>
+		);
+	});
 
 	return (
 		<section className="md:hidden sm:block">
 			<div className="flex my-3 mb-5">{buttonContent}</div>
 			{index === 0 && (
 				<div className="flex w-full">
-					<DataList>{races}</DataList>
+					<DataList>{<>{races}</>}</DataList>
 				</div>
 			)}
 			{index === 1 && (
 				<div className="flex w-full">
-					<DataList>{drivers}</DataList>
+					<DataList>{<>{drivers}</>}</DataList>
 				</div>
 			)}
 			{index === 2 && (
 				<div className="flex w-full">
-					<DataList>{constructors}</DataList>
+					<DataList>{<>{constructors}</>}</DataList>
 				</div>
 			)}
 		</section>

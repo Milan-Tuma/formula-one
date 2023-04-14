@@ -1,6 +1,20 @@
+import { FC } from 'react';
 import classes from './SeasonStandings.module.css';
 
-const SeasonStandings = ({ standingsData }) => {
+type SeasonStandingsProps = {
+	standingsData: {
+		Driver: {
+			code: string;
+			givenName: string;
+			familyName: string;
+		};
+		position: string;
+		points: string;
+		wins: string;
+	}[];
+};
+
+const SeasonStandings: FC<SeasonStandingsProps> = ({ standingsData }) => {
 	return (
 		<div className={classes.wrapper}>
 			<h2>Season Standings 🏆</h2>

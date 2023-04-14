@@ -1,8 +1,9 @@
+import { FC } from 'react';
 import './Loader.css';
 
-const Loader = () => {
+const Loader: FC = () => {
 	return (
-		<div className="lds-ring">
+		<div className="lds-ring" aria-hidden="true">
 			<div></div>
 			<div></div>
 			<div></div>

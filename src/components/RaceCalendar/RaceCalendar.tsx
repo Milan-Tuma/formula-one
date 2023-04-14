@@ -1,8 +1,16 @@
+import { FC } from 'react';
 import RaceDetail from '../RaceDetail/RaceDetail';
-
 import classes from './RaceCalendar.module.css';
 
-const RaceCalendar = ({ racesData, setRaceData }) => {
+type RaceCalendarProps = {
+	racesData: {
+		season: string;
+		Races: any[];
+	};
+	setRaceData: React.Dispatch<any>;
+};
+
+const RaceCalendar: FC<RaceCalendarProps> = ({ racesData, setRaceData }) => {
 	const { season, Races } = racesData;
 
 	return (

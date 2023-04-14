@@ -1,6 +1,18 @@
+import { FC } from 'react';
 import classes from './ConstructorStandings.module.css';
+import { ConstructorType, StandingsType } from '../../types/ergastAPI';
 
-const ConstructorStandings = ({ constructorsData }) => {
+type ConstructorStandingsProps = {
+	constructorsData: Array<
+		{
+			Constructor: ConstructorType;
+		} & Omit<StandingsType, 'positionText' | 'wins'>
+	>;
+};
+
+const ConstructorStandings: FC<ConstructorStandingsProps> = ({
+	constructorsData,
+}) => {
 	return (
 		<div className={classes.wrapper}>
 			<h2>Constructors Standings 🛠️</h2>

@@ -1,6 +1,13 @@
+import { FC } from 'react';
 import classes from './RaceDetail.module.css';
 
-const RaceDetail = ({ raceData, setRaceData, index }) => {
+type RaceDetailProps = {
+	raceData: any;
+	setRaceData: React.Dispatch<any>;
+	index: number;
+};
+
+const RaceDetail: FC<RaceDetailProps> = ({ raceData, setRaceData, index }) => {
 	const raceDate = new Date(raceData.date);
 	const readableDate = new Date(raceData.date).toLocaleDateString('en-GB', {
 		day: 'numeric',
