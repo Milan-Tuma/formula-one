@@ -6,9 +6,9 @@ import Button from '../ui/Button';
 import '../../index.css';
 
 type ResultStandingProps = {
-	raceData: any[];
-	driversData: any[];
-	constructorsData: any[];
+	raceData: any;
+	driversData: any;
+	constructorsData: any;
 };
 
 const ResultStanding: FC<ResultStandingProps> = ({
@@ -21,7 +21,7 @@ const ResultStanding: FC<ResultStandingProps> = ({
 	if (!raceData || !driversData || !constructorsData)
 		return <div className="align-center mx-5">Loading...</div>;
 
-	const races = raceData.map((race) => {
+	const races = raceData.map((race: any) => {
 		const driverName = race.Driver.givenName + ' ' + race.Driver.familyName;
 		const status = race.status === 'Finished' ? race.Time.time : race.status;
 		const { position, points } = race;
@@ -36,7 +36,7 @@ const ResultStanding: FC<ResultStandingProps> = ({
 		);
 	});
 
-	const drivers = driversData.map((driver) => {
+	const drivers = driversData.map((driver: any) => {
 		const driverName = driver.Driver.givenName + ' ' + driver.Driver.familyName;
 		const driverTeam = driver.Constructors[0].name;
 		const { position, points } = driver;
@@ -51,7 +51,7 @@ const ResultStanding: FC<ResultStandingProps> = ({
 		);
 	});
 
-	const constructors = constructorsData.map((constructor) => {
+	const constructors = constructorsData.map((constructor: any) => {
 		const teamName = constructor.Constructor.name;
 		const { position, points } = constructor;
 

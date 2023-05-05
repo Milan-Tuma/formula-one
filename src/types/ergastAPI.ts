@@ -23,47 +23,118 @@ export interface StandingsType {
 	wins: string;
 }
 
+export interface FastestLapType {
+	AverageSpeed: {
+		units: 'kph';
+		speed: string;
+	};
+	Time: TimeType;
+	lap: string;
+	rank: string;
+}
+
+export interface TimeType {
+	millis: string;
+	time: string;
+}
+
 export type raceResultType = {
-	Results: Array<
-		{
-			number: string;
-			Driver: DriverType;
-			Constructor: ConstructorType;
-			grid: string;
-			laps: string;
-			status: string;
-			Time: {
-				millis: string;
-				time: string;
-			};
-			FastestLap: {
-				rank: string;
-				lap: string;
-				Time: {
+	MRData: {
+		xmlns: string;
+		series: string;
+		url: string;
+		limit: string;
+		offset: string;
+		total: string;
+		RaceTable: {
+			season: string;
+			round: string;
+			Races: [
+				{
+					season: string;
+					round: string;
+					url: string;
+					raceName: string;
+					Circuit: {
+						circuitId: string;
+						url: string;
+						circuitName: string;
+						Location: {
+							lat: string;
+							long: string;
+							locality: string;
+							country: string;
+						};
+					};
+					date: string;
 					time: string;
-				};
-				AverageSpeed: {
-					units: string;
-					speed: string;
-				};
-			};
-		} & Omit<StandingsType, 'wins'>
-	>;
+					Results: [
+						{
+							number: string;
+							Driver: DriverType;
+							Constructor: ConstructorType;
+							grid: string;
+							laps: string;
+							status: string;
+							Time: TimeType;
+							FastestLap: FastestLapType;
+						} & Omit<StandingsType, 'wins'>
+					];
+				}
+			];
+		};
+	};
 };
 
 export type driverStandingsType = {
-	DriverStandings: Array<
-		{
-			Driver: DriverType;
-			Constructor: ConstructorType;
-		} & StandingsType
-	>;
+	MRData: {
+		xmlns: string;
+		series: string;
+		url: string;
+		limit: string;
+		offset: string;
+		total: string;
+		StandingsTable: {
+			season: string;
+			round: string;
+			StandingsLists: [
+				{
+					season: string;
+					round: string;
+					DriverStandings: [
+						{
+							Driver: DriverType;
+							Constructor: ConstructorType;
+						} & StandingsType
+					];
+				}
+			];
+		};
+	};
 };
 
 export type constructorStandingsType = {
-	ConstructorStandings: Array<
-		{
-			Constructor: ConstructorType;
-		} & StandingsType
-	>;
+	MRData: {
+		xmlns: string;
+		series: string;
+		url: string;
+		limit: string;
+		offset: string;
+		total: string;
+		StandingsTable: {
+			season: string;
+			round: string;
+			StandingsLists: [
+				{
+					season: string;
+					round: string;
+					ConstructorStandings: [
+						{
+							Constructor: ConstructorType;
+						} & StandingsType
+					];
+				}
+			];
+		};
+	};
 };

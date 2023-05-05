@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
 	getDataHandler,
 	getRaceData,
 	getDriverStandings,
 	getConstructorStandings,
 } from './utils/race-helper';
-// import RaceCalendar from './components/race-calendar/RaceCalendar';
+// import RaceCalendar from './components/activeRace-calendar/RaceCalendar';
 import RaceResult from './components/RaceResult/RaceResult';
 import SeasonStandings from './components/SeasonStanding/SeasonStandings';
 import Loader from './components/ui/Loader';
@@ -16,22 +16,54 @@ import RaceSelector from './components/RaceSelector/RaceSelector';
 
 import './index.css';
 import Hero from './components/Hero';
+import { finishedRaces } from './helpers/finishedRaces';
+import {
+	ConstructorType,
+	DriverType,
+	FastestLapType,
+	StandingsType,
+	TimeType,
+} from './types/ergastAPI';
+
+export type raceType = {
+	Constructor: ConstructorType;
+	Driver: DriverType;
+	FastestLap: FastestLapType;
+	Time: TimeType;
+	grid: string;
+	laps: string;
+	number: string;
+	points: string;
+	position: string;
+	positionText: string;
+	status: string;
+};
+
+export type driverStadingsType = {
+	Constructor: ConstructorType;
+	Driver: DriverType;
+} & StandingsType;
+
+export type constructorStandingsType = {
+	Constructor: ConstructorType;
+} & StandingsType;
 
 const App = () => {
 	let today = new Date();
 
 	const [data, setData] = useState<any>();
 	const [season, setSeason] = useState<number>(today.getFullYear());
-	const [race, setRace] = useState<any>();
-	const [raceData, setRaceData] = useState<any>();
-	const [standings, setStandings] = useState<any>();
-	const [constructors, setConstructors] = useState<any>();
+	const [activeRace, setActiveRace] = useState<number>();
+	const [raceData, setRaceData] = useState<raceType[]>();
+	const [standings, setStandings] = useState<driverStadingsType[]>();
+	const [constructors, setConstructors] =
+		useState<constructorStandingsType[]>();
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const lastRace = useMemo(() => {
 		if (!data) return;
 		const finishedRaces = data.Races.filter(
-			(race: any) => new Date(race.date) < new Date()
+			(activeRace: any) => new Date(activeRace.date) < new Date()
 		);
 		const recentRace = finishedRaces.reverse();
 		return recentRace[0];
@@ -40,22 +72,9 @@ const App = () => {
 	const nextRace = useMemo(() => {
 		if (!data) return;
 		const unfinishedRaces = data.Races.filter(
-			(race: any) => new Date(race.date) > new Date()
+			(activeRace: any) => new Date(activeRace.date) > new Date()
 		);
 		return unfinishedRaces[0];
-	}, [data]);
-
-	const finishedRaces = useCallback(() => {
-		try {
-			if (!data) return;
-			const finishedRaces = data.Races.filter((race: any) => {
-				return new Date(race.date) < new Date();
-			});
-			const raceNumber = finishedRaces.length;
-			setRace(raceNumber);
-		} catch (error: any) {
-			throw new Error(error.message);
-		}
 	}, [data]);
 
 	useEffect(() => {
@@ -67,24 +86,31 @@ const App = () => {
 
 	useEffect(() => {
 		(async () => {
-			if (!race) {
-				return finishedRaces();
+			if (!activeRace) {
+				return setActiveRace(finishedRaces(data));
 			}
 
-			const raceData = await getRaceData(season, race, setLoading);
-			setRaceData(raceData);
-
-			const standingsData = await getDriverStandings(season, race, setLoading);
-			setStandings(standingsData);
-
-			const constructorsData = await getConstructorStandings(
+			const racePromise = getRaceData(season, activeRace, setLoading);
+			const driversPromise = getDriverStandings(season, activeRace, setLoading);
+			const constructorsPromise = getConstructorStandings(
 				season,
-				race,
+				activeRace,
 				setLoading
 			);
-			setConstructors(constructorsData);
+
+			const dataPromise = Promise.all([
+				racePromise,
+				driversPromise,
+				constructorsPromise,
+			]);
+
+			const [races, drivers, constructors] = await dataPromise;
+
+			setRaceData(races);
+			setStandings(drivers);
+			setConstructors(constructors);
 		})();
-	}, [race, season, data, finishedRaces]);
+	}, [activeRace, season, data]);
 
 	return (
 		<div>
@@ -94,7 +120,7 @@ const App = () => {
 			</div>
 			<div style={{ display: 'flex' }}>
 				{/* {data && (
-					<RaceCalendar year={season} racesData={data} setRaceData={setRace} />
+					<RaceCalendar year={season} racesData={data} setRaceData={setActiveRace} />
 				)} */}
 				{raceData && <RaceResult raceData={raceData} />}
 				{standings && <SeasonStandings standingsData={standings} />}
@@ -104,7 +130,11 @@ const App = () => {
 			</div>
 			{data && <RecentRaces lastRace={lastRace} nextRace={nextRace} />}
 			{data && (
-				<RaceSelector setRace={setRace} currRace={race} racesData={data} />
+				<RaceSelector
+					setRace={setActiveRace}
+					currRace={activeRace}
+					racesData={data}
+				/>
 			)}
 			{data && (
 				<ResultStanding

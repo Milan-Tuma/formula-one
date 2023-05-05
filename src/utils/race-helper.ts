@@ -12,35 +12,39 @@ export const getDataHandler = async (apiUrl: string) => {
 
 export const getRaceData = async (
 	season: number,
-	race: string,
+	race: number,
 	setLoading: (arg1: boolean) => void
 ) => {
 	setLoading(true);
-	const data = await getDataHandler(`${season}/${race}/results`);
+	const data: raceResultType = await getDataHandler(
+		`${season}/${race}/results`
+	);
 	setLoading(false);
-	return data.MRData.RaceTable.Races[0].Results as raceResultType;
+	return data.MRData.RaceTable.Races[0].Results;
 };
 
 export const getDriverStandings = async (
 	season: number,
-	race: string,
+	race: number,
 	setLoading: (arg1: boolean) => void
 ) => {
 	setLoading(true);
-	const data = await getDataHandler(`${season}/${race}/driverStandings`);
+	const data: driverStandingsType = await getDataHandler(
+		`${season}/${race}/driverStandings`
+	);
 	setLoading(false);
-	return data.MRData.StandingsTable.StandingsLists[0]
-		.DriverStandings as driverStandingsType;
+	return data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
 };
 
 export const getConstructorStandings = async (
 	season: number,
-	race: string,
+	race: number,
 	setLoading: (arg1: boolean) => void
 ) => {
 	setLoading(true);
-	const data = await getDataHandler(`${season}/${race}/constructorStandings`);
+	const data: constructorStandingsType = await getDataHandler(
+		`${season}/${race}/constructorStandings`
+	);
 	setLoading(false);
-	return data.MRData.StandingsTable.StandingsLists[0]
-		.ConstructorStandings as constructorStandingsType;
+	return data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
 };
