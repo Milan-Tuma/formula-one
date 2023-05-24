@@ -3,10 +3,11 @@ import { FC, useState } from 'react';
 
 type HeroProps = {
 	headline: string;
-	year?: number;
+	year: number;
+	setSeason: (arg1: number) => void;
 };
 
-const Hero: FC<HeroProps> = ({ headline, year }) => {
+const Hero: FC<HeroProps> = ({ headline, year, setSeason }) => {
 	const [openModal, setOpenModal] = useState<boolean>(false);
 
 	return (
@@ -25,13 +26,21 @@ const Hero: FC<HeroProps> = ({ headline, year }) => {
 				)}
 			</div>
 			{openModal && (
-				<Modal closeModal={() => setOpenModal(false)} title={`${year}` ?? ''}>
-					<div>
-						<input
-							type="number"
-							value={year}
-							onChange={(e) => console.log(e.target.value)}
-						/>
+				<Modal closeModal={() => setOpenModal(false)} title="F1">
+					<div className="text-4xl font-bold flex justify-center items-center">
+						<button
+							className="text-2xl px-2"
+							onClick={() => setSeason(year - 1)}
+						>
+							<i className="fa-solid fa-caret-left" />
+						</button>
+						<div>{year}</div>
+						<button
+							className="text-2xl px-2"
+							onClick={() => setSeason(year + 1)}
+						>
+							<i className="fa-solid fa-caret-right" />
+						</button>
 					</div>
 				</Modal>
 			)}

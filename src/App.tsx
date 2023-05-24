@@ -13,7 +13,6 @@ import ConstructorStandings from './components/ConstructorStanding/ConstructorSt
 import RecentRaces from './components/RecentRaces';
 import ResultStanding from './components/ResultStanding/ResultStanding';
 import RaceSelector from './components/RaceSelector/RaceSelector';
-
 import './index.css';
 import Hero from './components/Hero';
 import { finishedRaces } from './helpers/finishedRaces';
@@ -23,6 +22,7 @@ import {
 	FastestLapType,
 	StandingsType,
 	TimeType,
+	seasonDataType,
 } from './types/ergastAPI';
 
 export type raceType = {
@@ -51,7 +51,8 @@ export type constructorStandingsType = {
 const App = () => {
 	let today = new Date();
 
-	const [data, setData] = useState<any>();
+	const [seasonData, setSeasonData] =
+		useState<seasonDataType['MRData']['RaceTable']>();
 	const [season, setSeason] = useState<number>(today.getFullYear());
 	const [activeRace, setActiveRace] = useState<number>();
 	const [raceData, setRaceData] = useState<raceType[]>();
@@ -61,33 +62,33 @@ const App = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const lastRace = useMemo(() => {
-		if (!data) return;
-		const finishedRaces = data.Races.filter(
-			(activeRace: any) => new Date(activeRace.date) < new Date()
+		if (!seasonData) return;
+		const finishedRaces = seasonData.Races.filter(
+			(activeRace) => new Date(activeRace.date) < new Date()
 		);
 		const recentRace = finishedRaces.reverse();
 		return recentRace[0];
-	}, [data]);
+	}, [seasonData]);
 
 	const nextRace = useMemo(() => {
-		if (!data) return;
-		const unfinishedRaces = data.Races.filter(
-			(activeRace: any) => new Date(activeRace.date) > new Date()
+		if (!seasonData) return;
+		const unfinishedRaces = seasonData.Races.filter(
+			(activeRace) => new Date(activeRace.date) > new Date()
 		);
 		return unfinishedRaces[0];
-	}, [data]);
+	}, [seasonData]);
 
 	useEffect(() => {
 		(async () => {
-			const seasonData = await getDataHandler(`${season}`);
-			setData(seasonData.MRData.RaceTable);
+			const seasonData: seasonDataType = await getDataHandler(`${season}`);
+			setSeasonData(seasonData.MRData.RaceTable);
 		})();
 	}, [season]);
 
 	useEffect(() => {
 		(async () => {
 			if (!activeRace) {
-				return setActiveRace(finishedRaces(data));
+				return setActiveRace(finishedRaces(seasonData));
 			}
 
 			const racePromise = getRaceData(season, activeRace, setLoading);
@@ -110,17 +111,17 @@ const App = () => {
 			setStandings(drivers);
 			setConstructors(constructors);
 		})();
-	}, [activeRace, season, data]);
+	}, [activeRace, season, seasonData]);
 
 	return (
 		<div>
-			<Hero headline="F1" year={season} />
+			<Hero headline="F1" year={season} setSeason={setSeason} />
 			<div style={{ position: 'fixed', top: '10px', right: '20px' }}>
 				{loading && <Loader />}
 			</div>
 			<div style={{ display: 'flex' }}>
-				{/* {data && (
-					<RaceCalendar year={season} racesData={data} setRaceData={setActiveRace} />
+				{/* {seasonData && (
+					<RaceCalendar year={season} racesData={seasonData} setRaceData={setActiveRace} />
 				)} */}
 				{raceData && <RaceResult raceData={raceData} />}
 				{standings && <SeasonStandings standingsData={standings} />}
@@ -128,15 +129,15 @@ const App = () => {
 					<ConstructorStandings constructorsData={constructors} />
 				)}
 			</div>
-			{data && <RecentRaces lastRace={lastRace} nextRace={nextRace} />}
-			{data && (
+			{seasonData && <RecentRaces lastRace={lastRace} nextRace={nextRace} />}
+			{seasonData && (
 				<RaceSelector
 					setRace={setActiveRace}
 					currRace={activeRace}
-					racesData={data}
+					racesData={seasonData}
 				/>
 			)}
-			{data && (
+			{seasonData && (
 				<ResultStanding
 					raceData={raceData}
 					driversData={standings}

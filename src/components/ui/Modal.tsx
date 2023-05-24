@@ -12,7 +12,7 @@ const Modal: FC<ModalProps> = ({ children, closeModal, title }) => {
 			<div className="flex w-full justify-between px-5 py-2">
 				{title && <div className="font-bold text-xl">{title}</div>}
 				<button
-					className="border border-solid border-white px-2 rounded-md"
+					className="border border-solid border-white px-2 rounded-md ml-auto"
 					onClick={closeModal}
 				>
 					Close
