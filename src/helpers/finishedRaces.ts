@@ -1,5 +1,6 @@
-export const finishedRaces = (data: any) => {
+import { seasonDataType } from '../types/ergastAPI';
+
+export const finishedRaces = (data?: seasonDataType['MRData']['RaceTable']) => {
 	if (!data) return;
-	return data.Races.filter((race: any) => new Date(race.date) < new Date())
-		.length;
+	return data.Races.filter((race) => new Date(race.date) < new Date()).length;
 };

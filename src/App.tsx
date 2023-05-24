@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import {
 	getDataHandler,
 	getRaceData,
@@ -61,23 +61,6 @@ const App = () => {
 		useState<constructorStandingsType[]>();
 	const [loading, setLoading] = useState<boolean>(false);
 
-	const lastRace = useMemo(() => {
-		if (!seasonData) return;
-		const finishedRaces = seasonData.Races.filter(
-			(activeRace) => new Date(activeRace.date) < new Date()
-		);
-		const recentRace = finishedRaces.reverse();
-		return recentRace[0];
-	}, [seasonData]);
-
-	const nextRace = useMemo(() => {
-		if (!seasonData) return;
-		const unfinishedRaces = seasonData.Races.filter(
-			(activeRace) => new Date(activeRace.date) > new Date()
-		);
-		return unfinishedRaces[0];
-	}, [seasonData]);
-
 	useEffect(() => {
 		(async () => {
 			const seasonData: seasonDataType = await getDataHandler(`${season}`);
@@ -129,7 +112,7 @@ const App = () => {
 					<ConstructorStandings constructorsData={constructors} />
 				)}
 			</div>
-			{seasonData && <RecentRaces lastRace={lastRace} nextRace={nextRace} />}
+			{seasonData && <RecentRaces seasonData={seasonData} />}
 			{seasonData && (
 				<RaceSelector
 					setRace={setActiveRace}
